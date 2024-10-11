@@ -1,22 +1,16 @@
 # Trip Plan Project
-
-# Trip Plan
-
-- 여행 플랜 관리 웹 (모바일 중점)
+- 여행 플랜 관리 웹
 - 여행 일정을 생성하고, 입력한 목적지를 기반으로 적절한 여행 동선 추천
 - 사용 예정 기술
 
-<aside>
 💡
-
 1. Frontend: React
 2. Backend: Spring boot
 3. Database: MySQL
 4. API: Naver MAP API
 5. IDE: IntelliJ
-</aside>
-
 - 이번 프로젝트의 목표는 Spring boot를 공부하며 익히기 위함
+
 
 ### 상세 기능 설명
 
@@ -58,3 +52,6 @@ ERD(추후 수정될 가능성 있음): https://www.erdcloud.com/d/oDeFHEKHeYieQ
 
 
   
+
+
+
