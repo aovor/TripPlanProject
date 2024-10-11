@@ -53,7 +53,8 @@
         ⇒ (영수증 인증 네이버 api)
         
 
-ERD(추후 수정 가능): https://www.erdcloud.com/d/oDeFHEKHeYieQ2Mxa
-![image](https://github.com/user-attachments/assets/2e7e967e-0370-426c-b1c7-0165d0ab95df)
+ERD(추후 수정될 가능성 있음): https://www.erdcloud.com/d/oDeFHEKHeYieQ2Mxa
+![image](https://github.com/user-attachments/assets/7c36503a-204e-4eda-9325-c563ba54736f)
+
 
   
