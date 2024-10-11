@@ -1,0 +1,16 @@
+# IntelliJ
+/.idea/
+/backend/TripPlanProject/.idea/
+/backend/TripPlanProject/build/
+/backend/TripPlanProject/.gradle/
+/backend/TripPlanProject/gradle/wrapper/
+
+# VSCode
+/.vscode/
+
+# Node Modules
+/frontend/node_modules/
+
+# Gradle
+/backend/TripPlanProject/gradle/
+/backend/TripPlanProject/build/
