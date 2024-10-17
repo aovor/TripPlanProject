@@ -1,10 +1,14 @@
 import React from 'react';
 import './Main.css';
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 
 function Main() {
+  const navigate = useNavigate();
+
     const handleClick = () => {
-        alert('로그인');
+      navigate('/Login');
     };
 
     const handleClick2 = () => {
@@ -32,7 +36,7 @@ function Main() {
 
         {/* 오른쪽 그리드 */}
           <div className="right-grid">
-            <div>서동재ㅡㅡ</div> {/* 여기 오른쪽 그리드에 "안녕" 추가 */}
+            <div>ㅡㅡ</div> {/* 여기 오른쪽 그리드에 "안녕" 추가 */}
           </div>
         </header>
       </div>
