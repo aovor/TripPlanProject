@@ -5,31 +5,38 @@ import './Login.css';
 
 function Login() {
 
-  const [id, setId] = useState('')
+  const [userid, setUserId] = useState('')
   const [pw, setPw] = useState('')
 
   const handleClick = () => {
-    
-
-    if (!id || !pw) {
+    if (!userid || !pw) {
       alert("아이디와 비밀번호를 다시 입력해 주세요!");
       return;
     }
 
     alert('로그인 버튼 눌림');
 
-    axios.post('https://localhost:8080/login', 
+    axios.post('/api/auth/login', 
       {
-        username: id,  
+        userId: userid,  
         password: pw    
       },
-      {
-        withCredentials: true // 쿠키
-      }
     )
     .then(response => {
-      alert('로그인');
-      console.log('로그인 성공:', response);
+      if (response.status == 200) {
+        const token = response.data.token;
+        localStorage.setItem('token', token); // 토큰 저장
+
+        alert('로그인');
+        console.log('로그인 성공:', response);
+      }
+      else if (response.status == 401){
+        alert('아이디, 비밀번호가 틀렸습니다.')
+        console.log('401 Unauthorized')
+      }
+      else if (response.status = 500){
+        console.log('500 Internal Server Error, 서버오류')
+      }
     })
     .catch(error => {
       console.error('로그인 실패:', error);
@@ -37,7 +44,7 @@ function Login() {
   };
 
   const handleUsernameChange = (event) => {
-    setId(event.target.value);
+    setUserId(event.target.value);
   };
 
   const handlePasswordChange = (event) => {
@@ -57,7 +64,7 @@ function Login() {
                     variant="outlined"
                     fullWidth
                     margin="normal"
-                    value = {id}
+                    value = {userid}
                     onChange={handleUsernameChange}
                     style={{ width: '300px' }} 
                   />
