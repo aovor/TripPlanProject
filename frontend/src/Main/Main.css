@@ -75,13 +75,13 @@
 
 /* 섹션 이동 */
 .circle-navigation {
-  position: fixed; 
-  right: 120px; /* 오른쪽 여백 */
-  top: 50%; 
-  transform: translateY(-50%);
-  display: flex;
-  flex-direction: column;
-  gap: 15px; 
+  position: fixed;
+  right: 50px;   
+  z-index: 100;    
+  display: flex;  
+  flex-direction: column; 
+  align-items: flex-end; 
+  gap: 10px; 
 }
 
 .circle {
