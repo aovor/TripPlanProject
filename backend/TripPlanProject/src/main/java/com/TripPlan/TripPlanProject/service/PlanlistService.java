@@ -56,8 +56,8 @@ public class PlanlistService {
 
         String today = new SimpleDateFormat("yyyyMMdd").format(new Date());
         do {
-            int randomNumber = new Random().nextInt(100000); // 0부터 99999까지 랜덤 숫자 생성
-            String randomStr = String.format("%05d", randomNumber); // 항상 5자리로 포맷
+            int randomNumber = new Random().nextInt(100000);
+            String randomStr = String.format("%05d", randomNumber);
 
             plannum = today + randomStr;
 

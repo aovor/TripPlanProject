@@ -1,11 +1,11 @@
 package com.TripPlan.TripPlanProject.service;
 
-import com.TripPlan.TripPlanProject.dto.UserResponseDTO;
 import com.TripPlan.TripPlanProject.model.User;
 import com.TripPlan.TripPlanProject.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
 import java.time.LocalDateTime;
 
 @Service
@@ -16,50 +16,44 @@ public class UserService {
     private UserRepository userRepository;
 
     // 아이디 중복 + 글자수 확인
-    public UserResponseDTO checkIdUser(String userId) {
-        if (userId.length() < 5){
-            return new UserResponseDTO("Fail", "아이디는 다섯 글자 이상이어야 합니다.");
+    public void validateUserId(String userId) {
+        if (userId.length() < 5) {
+            throw new IllegalArgumentException("아이디는 다섯 글자 이상이어야 합니다.");
         }
 
         if (userRepository.existsByUserId(userId)) {
-            return new UserResponseDTO("Fail", "아이디가 이미 존재합니다.");
+            throw new IllegalArgumentException("아이디가 이미 존재합니다.");
         }
-        return new UserResponseDTO("Success", "사용 가능한 아이디입니다.");
     }
 
     // 이메일 중복 확인
-    public UserResponseDTO checkEmailUser(String email) {
+    public void validateEmail(String email) {
         if (userRepository.existsByEmail(email)) {
-            return new UserResponseDTO("Fail", "이메일이 이미 존재합니다.");
+            throw new IllegalArgumentException("이메일이 이미 존재합니다.");
         }
-        return new UserResponseDTO("Success", "사용 가능한 이메일입니다.");
+    }
+
+    // 비밀번호 유효성 검사
+    public void validatePassword(String password) {
+        if (!password.matches(PASSWORD_REGEX) || password.length() < 8) {
+            throw new IllegalArgumentException("비밀번호는 대문자/소문자/특수문자를 포함하여 여덟 글자 이상이어야 합니다.");
+        }
     }
 
     // 회원 가입
-    public UserResponseDTO registerUser(User user) {
-        if (user.getUserId().length() < 5){
-            return new UserResponseDTO("Fail", "아이디는 다섯 글자 이상이어야 합니다.");
-        }
+    public User registerUser(User user) {
+        // 아이디와 이메일, 비밀번호 유효성 검사
+        validateUserId(user.getUserId());
+        validateEmail(user.getEmail());
+        validatePassword(user.getPassword());
 
-        if (userRepository.existsByUserId(user.getUserId())) {
-            return new UserResponseDTO("Fail", "아이디가 이미 존재합니다.");
-        }
-
-        if (userRepository.existsByEmail(user.getEmail())) {
-            return new UserResponseDTO("Fail", "이메일이 이미 존재합니다.");
-        }
-
-        if(!user.getPassword().matches(PASSWORD_REGEX)){
-            return new UserResponseDTO("Fail", "비밀번호는 대문자/소문자/특수문자를 포함해야 합니다.");
-        }
-
+        // 비밀번호 암호화 후 저장
         user.setPassword(hashPassword(user.getPassword()));
         user.setJoinDate(LocalDateTime.now());
-        userRepository.save(user);
-
-        return new UserResponseDTO("Success", "회원가입이 성공적으로 완료되었습니다.");
+        return userRepository.save(user);
     }
 
+    // 비밀번호 해싱
     private String hashPassword(String password) {
         return new BCryptPasswordEncoder().encode(password);
     }
