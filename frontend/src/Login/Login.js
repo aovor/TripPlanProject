@@ -1,15 +1,51 @@
-import React from 'react';
+import React, {useState} from 'react';
+import axios from 'axios'
 import { TextField, Box } from '@mui/material';
 import './Login.css';
 
 function Login() {
 
+  const [id, setId] = useState('')
+  const [pw, setPw] = useState('')
+
   const handleClick = () => {
-    alert('로그인');
+    
+
+    if (!id || !pw) {
+      alert("아이디와 비밀번호를 다시 입력해 주세요!");
+      return;
+    }
+
+    alert('로그인 버튼 눌림');
+
+    axios.post('https://localhost:8080/login', 
+      {
+        username: id,  
+        password: pw    
+      },
+      {
+        withCredentials: true // 쿠키
+      }
+    )
+    .then(response => {
+      alert('로그인');
+      console.log('로그인 성공:', response);
+    })
+    .catch(error => {
+      console.error('로그인 실패:', error);
+    });
   };
 
-      return (
-        <div className="Main">
+  const handleUsernameChange = (event) => {
+    setId(event.target.value);
+  };
+
+  const handlePasswordChange = (event) => {
+    setPw(event.target.value);
+  };
+
+  return (
+        <div className="Main2">
           <header className="Main-header1">
               <div className="box">
                 <div className = "login-title">
@@ -21,6 +57,8 @@ function Login() {
                     variant="outlined"
                     fullWidth
                     margin="normal"
+                    value = {id}
+                    onChange={handleUsernameChange}
                     style={{ width: '300px' }} 
                   />
                   <TextField
@@ -29,17 +67,17 @@ function Login() {
                     variant="outlined"
                     fullWidth
                     margin="normal"
+                    value = {pw}
+                    onChange={handlePasswordChange}
                     style={{ width: '300px' }} 
                   />
                   <button className="login-button" onClick={handleClick}>
                     로그인
                   </button>
-                </div> 
-
-                
+                </div>
           </header>
         </div>
-      );
+    );
   }
   
   export default Login;

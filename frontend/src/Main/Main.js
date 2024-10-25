@@ -12,7 +12,7 @@ function Main() {
     };
 
     const handleClick2 = () => {
-      alert('회원가입');
+      navigate('/Signup');
   };
 
     return (
@@ -30,8 +30,16 @@ function Main() {
             <button className="custom-button" onClick={handleClick2}>
               회원가입
             </button>
-          
         </header>
+
+      {/* 추가 설명 섹션 */}
+      <section className="additional-content">
+        <h2>Trip Plan</h2>
+      </section>
+
+
+
+
       </div>
     );
 }

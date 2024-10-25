@@ -1,6 +1,9 @@
 
 .Main {
     text-align: center;
+    height : 300vh;
+    overflow-y: auto; /* 세로 스크롤 허용 */
+    background-color: rgba(53, 99, 233, 0.15);
   }
 
   .Main-header {
@@ -43,6 +46,25 @@
     width : 18rem; 
 }
 
+/* 추가 설명 섹션 */
+.additional-content {
+  /*background-color: white;*/
+  padding: 50px;
+  margin-top: 50px;
+}
+
+.additional-content h2 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
+.additional-content p {
+  font-size: 1.2rem;
+  line-height: 1.6;
+}
+
+
+/* 모바일 화면 */
 .custom-button:hover {
     box-shadow: 0px 0px 10px rgba(0, 0, 255, 0.5); /* 호버 시 그림자 효과 */
 }
