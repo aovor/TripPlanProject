@@ -34,7 +34,7 @@
 
 
 .login-title {
-    font-size : 1.5rem;
+    font-size : 1.8rem;
     align-items: center;
     margin-bottom : 20px;
     font-weight : bold;
@@ -55,6 +55,24 @@
     transition: box-shadow 0.3s ease; 
     margin: 10px;
     width : 18rem; 
+}
+
+/* 선 */
+.divider {
+  width: 50%;
+  height: 1px;
+  background-color: #ccc;
+  margin: 1rem 0;
+}
+
+.link {
+  color: #007bff;
+  font-size: 0.9rem;
+  text-decoration: none;
+}
+
+.link:hover {
+  text-decoration: underline;
 }
 
 .login-button:active {

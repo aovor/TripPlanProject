@@ -1,9 +1,10 @@
 
 .Main {
     text-align: center;
-    height : 300vh;
     overflow-y: auto; /* 세로 스크롤 허용 */
-    background-color: rgba(53, 99, 233, 0.15);
+    background-color: white;
+    scroll-snap-type: y mandatory; /* 스크롤 스냅 활성화 */
+    height: 100vh;
   }
 
   .Main-header {
@@ -17,6 +18,7 @@
     color: white;
     width: 100%; 
     margin: 0 auto;
+    scroll-snap-align: start; /* 섹션 스냅 시작 지점 */
   }
 
 
@@ -47,24 +49,60 @@
 }
 
 /* 추가 설명 섹션 */
-.additional-content {
-  /*background-color: white;*/
+.additional-content,
+.additional-content2,
+.additional-content3 {
+  background-color: white;
   padding: 50px;
-  margin-top: 50px;
+  margin-top: 20px;
+  min-height: 100vh; /* 섹션 높이 지정 */
+  scroll-snap-align: start; /* 섹션 스냅 시작 지점 */
 }
 
-.additional-content h2 {
+.additional-content h2,
+.additional-content2 h2,
+.additional-content3 h2 {
   font-size: 2rem;
   margin-bottom: 20px;
 }
 
-.additional-content p {
+.additional-content p,
+.additional-content2 p,
+.additional-content3 p  {
   font-size: 1.2rem;
   line-height: 1.6;
 }
 
+/* 섹션 이동 */
+.circle-navigation {
+  position: fixed; 
+  right: 120px; /* 오른쪽 여백 */
+  top: 50%; 
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 15px; 
+}
 
-/* 모바일 화면 */
+.circle {
+  width: 20px; 
+  height: 20px; 
+  border-radius: 50%; 
+  background-color: rgba(53, 99, 233, 0.48); 
+  color: white; 
+  display: flex;
+  align-items: center; 
+  justify-content: center; 
+  cursor: pointer; 
+  transition: background-color 0.3s;
+}
+
+.circle:hover {
+  background-color: white; 
+}
+
+
+/* 로그인, 회원가입 버튼 */
 .custom-button:hover {
     box-shadow: 0px 0px 10px rgba(0, 0, 255, 0.5); /* 호버 시 그림자 효과 */
 }

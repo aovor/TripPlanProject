@@ -71,9 +71,34 @@ function Login() {
                     onChange={handlePasswordChange}
                     style={{ width: '300px' }} 
                   />
-                  <button className="login-button" onClick={handleClick}>
+
+                  <a href="/SearchPw" className="link" 
+                     style={{ 
+                              display: 'block', 
+                              textAlign: 'right', 
+                              width: '300px', 
+                              marginBottom: '0.5rem',  
+                              fontSize : '0.8rem'}}>
+
+                    비밀번호 찾기
+                  </a>
+
+                  
+                  <button className="login-button" onClick={handleClick} style={{ width: '300px' }}>
                     로그인
                   </button>
+
+                  <div className="divider"></div>
+
+                    <a href="/Signup" 
+                      className="link" 
+                      style = {{
+                          fontSize : '0.8rem'
+                        }}>
+                        계정이 없다면? 회원가입
+                    </a> 
+                 
+
                 </div>
           </header>
         </div>
