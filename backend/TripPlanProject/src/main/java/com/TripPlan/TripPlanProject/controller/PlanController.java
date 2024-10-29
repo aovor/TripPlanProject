@@ -130,4 +130,106 @@ public class PlanController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error: " + e.getMessage());
         }
     }
+
+    // 일정 수정 api
+    @PutMapping("/planupdate")
+    public ResponseEntity<?> updatePlan(@RequestHeader("Authorization") String token,
+                                        @RequestBody PlanlistResponseDTO planRequest,
+                                        @RequestParam String plannum) {
+        try {
+            String jwtToken = token.substring(7);
+
+            if (!jwtTokenProvider.validateToken(jwtToken)) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid JWT token");
+            }
+
+            String userId = jwtTokenProvider.getUsername(jwtToken);
+
+            if(!planlistService.isPlanOwner(plannum, userId)){
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("You are not authorized to update this plan");
+            }
+
+            UserResponseDTO response = planlistService.updatePlan(planRequest.toEntity(), plannum);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error: " + e.getMessage());
+        }
+    }
+
+    // 세부 일정 수정 api
+    @PutMapping("/plandetailupdate")
+    public ResponseEntity<?> updatePlanDetail(@RequestHeader("Authorization") String token,
+                                        @RequestBody DetailResponseDTO detailRequest,
+                                              @RequestParam String plannum, int tripdate, String Destination) {
+        try {
+            String jwtToken = token.substring(7);
+
+            if (!jwtTokenProvider.validateToken(jwtToken)) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid JWT token");
+            }
+
+            String userId = jwtTokenProvider.getUsername(jwtToken);
+
+            if (!planlistService.isPlanOwner(plannum, userId)) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("You are not authorized to delete this plan");
+            }
+
+            UserResponseDTO response = planlistService.updatePlanDetail(detailRequest.toEntity(), plannum, tripdate, Destination);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error: " + e.getMessage());
+        }
+    }
+
+    // 일정 삭제 api
+    @DeleteMapping("/plandelete")
+    public ResponseEntity<?> deletePlan(@RequestHeader("Authorization") String token,
+                                        @RequestParam String plannum) {
+        try {
+            String jwtToken = token.substring(7);
+
+            if (!jwtTokenProvider.validateToken(jwtToken)) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid JWT token");
+            }
+
+            String userId = jwtTokenProvider.getUsername(jwtToken);
+
+            if (!planlistService.isPlanOwner(plannum, userId)) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("You are not authorized to delete this plan");
+            }
+
+            UserResponseDTO response = planlistService.deletePlan(plannum);
+            return ResponseEntity.ok(response);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Plan not found: " + e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error: " + e.getMessage());
+        }
+    }
+
+    // 세부 일정 삭제 api
+    @DeleteMapping("/plandetaildelete")
+    public ResponseEntity<?> deleteDetailPlan(@RequestHeader("Authorization") String token,
+                                        @RequestParam String plannum, int tripdate, String Destination) {
+        try {
+            String jwtToken = token.substring(7);
+
+            if (!jwtTokenProvider.validateToken(jwtToken)) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid JWT token");
+            }
+
+            String userId = jwtTokenProvider.getUsername(jwtToken);
+
+            if (!planlistService.isPlanOwner(plannum, userId)) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("You are not authorized to delete this plan");
+            }
+
+            UserResponseDTO response = planlistService.deletePlanDetail(plannum, tripdate, Destination);
+            return ResponseEntity.ok(response);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Plan not found: " + e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error: " + e.getMessage());
+        }
+    }
 }
