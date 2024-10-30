@@ -5,6 +5,8 @@ import lombok.NoArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Entity
 @Table(name = "Planlist")
 @Getter
@@ -39,4 +41,10 @@ public class Planlist {
     @ManyToOne
     @JoinColumn(name = "UserID", referencedColumnName = "UserID", insertable = false, updatable = false)
     private User user;
+
+    @OneToMany(mappedBy = "planlist", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<TripMember> tripMembers;
+
+    @OneToMany(mappedBy = "planlist", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<Tripplandetail> tripplandetails;
 }

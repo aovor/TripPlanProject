@@ -2,27 +2,30 @@ package com.TripPlan.TripPlanProject.service;
 
 import com.TripPlan.TripPlanProject.dto.UserResponseDTO;
 import com.TripPlan.TripPlanProject.model.Planlist;
+import com.TripPlan.TripPlanProject.model.TripMember;
 import com.TripPlan.TripPlanProject.model.Tripplandetail;
 import com.TripPlan.TripPlanProject.repository.PlandetailRepository;
 import com.TripPlan.TripPlanProject.repository.PlanlistRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.TripPlan.TripPlanProject.repository.TripMemberRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 @Service
 public class PlanlistService {
-    @Autowired
     private final PlanlistRepository planlistRepository;
     private final PlandetailRepository plandetailRepository;
+    private final TripMemberRepository tripMemberRepository;
 
-    public PlanlistService(PlanlistRepository planlistRepository, PlandetailRepository plandetailRepository){
+    public PlanlistService(PlanlistRepository planlistRepository, PlandetailRepository plandetailRepository, TripMemberRepository tripMemberRepository){
         this.planlistRepository = planlistRepository;
         this.plandetailRepository = plandetailRepository;
+        this.tripMemberRepository = tripMemberRepository;
     }
 
     // 여행 일정 생성
@@ -30,27 +33,32 @@ public class PlanlistService {
         String plannum = generateUniquePlannum();
         trip.setPlannum(plannum);
         planlistRepository.save(trip);
+
+        TripMember tripMember = new TripMember();
+        tripMember.setPlannum(plannum);
+        tripMember.setUserId(trip.getUserId());
+        tripMember.setAuthority(1);
+        tripMemberRepository.save(tripMember);
+
         return new UserResponseDTO("Success", "일정이 성공적으로 추가되었습니다.");
     }
 
     // 여행 세부 일정 생성
-    public UserResponseDTO addDetail(Tripplandetail trip) {
+    public UserResponseDTO addDetail(Tripplandetail trip, String userId) {
+        if (!hasAuthority(trip.getPlannum(), userId, 1, 2)) {
+            return new UserResponseDTO("Fail", "일정을 생성할 권한이 없습니다.");
+        }
+
         plandetailRepository.save(trip);
         return new UserResponseDTO("Success", "일정이 성공적으로 추가되었습니다.");
     }
 
-    // 여행 일정 리스트 반환
-    public List<Planlist> getPlanlistsByUserId(String userId) {
-        return planlistRepository.findByUserId(userId);
-    }
-
-    // 여행 세부 일정 리스트 반환
-    public List<Tripplandetail> getPlandetailByPlannum(String plannum) {
-        return plandetailRepository.findByPlannum(plannum);
-    }
-
     // 여행 일정 수정
-    public UserResponseDTO updatePlan(Planlist updatePlan, String plannum) {
+    public UserResponseDTO updatePlan(Planlist updatePlan, String plannum, String userId) {
+        if (!hasAuthority(plannum, userId, 1, 2)) {
+            return new UserResponseDTO("Fail", "일정을 수정할 권한이 없습니다.");
+        }
+
         Planlist existingPlan = planlistRepository.findByPlannum(plannum)
                 .orElseThrow(() -> new IllegalArgumentException("Plan not found"));
 
@@ -66,7 +74,11 @@ public class PlanlistService {
     }
 
     // 여행 세부 일정 수정
-    public UserResponseDTO updatePlanDetail(Tripplandetail updateDetail, String plannum, int tripdate, String Destination) {
+    public UserResponseDTO updatePlanDetail(Tripplandetail updateDetail, String plannum, String userId, int tripdate, String Destination) {
+        if (!hasAuthority(plannum, userId, 1, 2)) {
+            return new UserResponseDTO("Fail", "일정을 수정할 권한이 없습니다.");
+        }
+
         Tripplandetail existingDetail = plandetailRepository.findByPlannumAndTripdateAndDestination(
                 plannum,
                 tripdate,
@@ -85,23 +97,80 @@ public class PlanlistService {
 
     // 여행 일정 삭제
     @Transactional
-    public UserResponseDTO deletePlan(String plannum) {
-        plandetailRepository.deleteByPlannum(plannum); // 만약 CascadeType.REMOVE를 사용하지 않는다면 이 부분이 필요합니다.
-        planlistRepository.deleteByPlannum(plannum);
+    public UserResponseDTO deletePlan(String plannum, String userId) {
+        if (!hasAuthority(plannum, userId, 1)) {
+            return new UserResponseDTO("Fail", "일정을 삭제할 권한이 없습니다.");
+        }
+        Planlist planlist = planlistRepository.findByPlannum(plannum)
+                .orElseThrow(() -> new IllegalArgumentException("Plan not found"));
+
+        planlistRepository.delete(planlist);
 
         return new UserResponseDTO("Success", "일정이 성공적으로 삭제되었습니다.");
     }
 
     // 여행 세부 일정 삭제
     @Transactional
-    public UserResponseDTO deletePlanDetail(String plannum, int tripdate, String destination) {
+    public UserResponseDTO deletePlanDetail(String plannum, String userId, int tripdate, String destination) {
+        if (!hasAuthority(plannum, userId, 1, 2)) {
+            return new UserResponseDTO("Fail", "일정을 삭제할 권한이 없습니다.");
+        }
+
         plandetailRepository.deleteByPlannumAndTripdateAndDestination(plannum, tripdate, destination);
         return new UserResponseDTO("Success", "세부 일정이 성공적으로 삭제되었습니다.");
     }
 
-    // 소유자 확인 메서드
-    public boolean isPlanOwner(String plannum, String userId) {
-        return planlistRepository.existsByPlannumAndUserId(plannum, userId);
+    // 여행 일정 리스트 반환
+    public List<Planlist> getPlanlistsByUserId(String userId) {
+        List<String> plannums = tripMemberRepository.findPlannumsByUserId(userId);
+        return planlistRepository.findByPlannumIn(plannums);
+    }
+
+    // 여행 세부 일정 리스트 반환
+    public List<Tripplandetail> getPlandetailByPlannum(String plannum) {
+        return plandetailRepository.findByPlannum(plannum);
+    }
+
+    // 여행 동행인 추가
+    public UserResponseDTO addTripMember(String plannum, String userId, String userIdforadd, int authority) {
+        if (!hasAuthority(plannum, userId, 1)) {
+            return new UserResponseDTO("Fail", "동행인을 추가할 권한이 없습니다.");
+        }
+
+        TripMember addtripMember = new TripMember();
+        addtripMember.setPlannum(plannum);
+        addtripMember.setUserId(userIdforadd);
+        addtripMember.setAuthority(authority);
+        tripMemberRepository.save(addtripMember);
+
+        return new UserResponseDTO("Success", "동행인 추가가 성공적으로 완료되었습니다.");
+    }
+
+    // 여행 동행인 삭제
+    @Transactional
+    public UserResponseDTO deleteTripMember(String plannum, String userId, String userIdfordelete) {
+        if (!hasAuthority(plannum, userId, 1)) {
+            return new UserResponseDTO("Fail", "동행인을 삭제할 권한이 없습니다.");
+        }
+
+        tripMemberRepository.deleteByPlannumAndUserId(plannum, userIdfordelete);
+        return new UserResponseDTO("Success", "동행인 삭제가 성공적으로 완료되었습니다.");
+    }
+
+    // 권한 검사
+    private boolean hasAuthority(String plannum, String userId, int... requiredAuthorities) {
+        Optional<TripMember> tripMemberOpt = tripMemberRepository.findByPlannumAndUserId(plannum, userId);
+        if (tripMemberOpt.isEmpty()) {
+            return false;
+        }
+
+        int userAuthority = tripMemberOpt.get().getAuthority();
+        for (int requiredAuthority : requiredAuthorities) {
+            if (userAuthority == requiredAuthority) {
+                return true;
+            }
+        }
+        return false;
     }
 
     // plannum 생성

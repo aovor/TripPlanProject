@@ -56,11 +56,13 @@ public class PlanController {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid JWT token");
             }
 
+            String userId = jwtTokenProvider.getUsername(jwtToken);
+
             if (planRequest.getPlannum() == null || planRequest.getPlannum().isEmpty()) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Plan number is missing");
             }
 
-            UserResponseDTO response = planlistService.addDetail(planRequest.toEntity());
+            UserResponseDTO response = planlistService.addDetail(planRequest.toEntity(), userId);
             return ResponseEntity.status(HttpStatus.CREATED).body(response);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error: " + e.getMessage());
@@ -79,6 +81,10 @@ public class PlanController {
         try {
             String userId = jwtTokenProvider.getUsername(jwtToken);
             List<Planlist> planlists = planlistService.getPlanlistsByUserId(userId);
+            if (planlists.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No planlists found for the userId");
+            }
+
             List<PlanlistResponseDTO> response = planlists.stream()
                     .map(planlist -> new PlanlistResponseDTO(
                             planlist.getPlannum(),
@@ -145,11 +151,7 @@ public class PlanController {
 
             String userId = jwtTokenProvider.getUsername(jwtToken);
 
-            if(!planlistService.isPlanOwner(plannum, userId)){
-                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("You are not authorized to update this plan");
-            }
-
-            UserResponseDTO response = planlistService.updatePlan(planRequest.toEntity(), plannum);
+            UserResponseDTO response = planlistService.updatePlan(planRequest.toEntity(), plannum, userId);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error: " + e.getMessage());
@@ -170,11 +172,7 @@ public class PlanController {
 
             String userId = jwtTokenProvider.getUsername(jwtToken);
 
-            if (!planlistService.isPlanOwner(plannum, userId)) {
-                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("You are not authorized to delete this plan");
-            }
-
-            UserResponseDTO response = planlistService.updatePlanDetail(detailRequest.toEntity(), plannum, tripdate, Destination);
+            UserResponseDTO response = planlistService.updatePlanDetail(detailRequest.toEntity(), plannum, userId, tripdate, Destination);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error: " + e.getMessage());
@@ -194,11 +192,7 @@ public class PlanController {
 
             String userId = jwtTokenProvider.getUsername(jwtToken);
 
-            if (!planlistService.isPlanOwner(plannum, userId)) {
-                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("You are not authorized to delete this plan");
-            }
-
-            UserResponseDTO response = planlistService.deletePlan(plannum);
+            UserResponseDTO response = planlistService.deletePlan(plannum, userId);
             return ResponseEntity.ok(response);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Plan not found: " + e.getMessage());
@@ -220,11 +214,49 @@ public class PlanController {
 
             String userId = jwtTokenProvider.getUsername(jwtToken);
 
-            if (!planlistService.isPlanOwner(plannum, userId)) {
-                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("You are not authorized to delete this plan");
+            UserResponseDTO response = planlistService.deletePlanDetail(plannum, userId, tripdate, Destination);
+            return ResponseEntity.ok(response);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Plan not found: " + e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error: " + e.getMessage());
+        }
+    }
+
+    // 여행 동행인 추가
+    @PostMapping("/addtripmember")
+    public ResponseEntity<?> addTripMember(@RequestHeader("Authorization") String token,
+                                           @RequestParam String plannum, String userIdforadd, int authority) {
+        try{
+            String jwtToken = token.substring(7);
+
+            if (!jwtTokenProvider.validateToken(jwtToken)) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid JWT token");
             }
 
-            UserResponseDTO response = planlistService.deletePlanDetail(plannum, tripdate, Destination);
+            String userId = jwtTokenProvider.getUsername(jwtToken);
+
+            UserResponseDTO response = planlistService.addTripMember(plannum, userId, userIdforadd, authority);
+            return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error: " + e.getMessage());
+        }
+    }
+
+    // 여행 동행인 삭제
+    @DeleteMapping("/deletetripmember")
+    public ResponseEntity<?> deleteTripMember(@RequestHeader("Authorization") String token,
+                                              @RequestParam String plannum, String userIdfordelete) {
+        try {
+            String jwtToken = token.substring(7);
+
+            if (!jwtTokenProvider.validateToken(jwtToken)) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid JWT token");
+            }
+
+            String userId = jwtTokenProvider.getUsername(jwtToken);
+
+            UserResponseDTO response = planlistService.deleteTripMember(plannum, userId, userIdfordelete);
             return ResponseEntity.ok(response);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Plan not found: " + e.getMessage());
