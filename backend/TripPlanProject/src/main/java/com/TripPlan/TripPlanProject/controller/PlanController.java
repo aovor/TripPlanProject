@@ -2,8 +2,10 @@ package com.TripPlan.TripPlanProject.controller;
 
 import com.TripPlan.TripPlanProject.dto.DetailResponseDTO;
 import com.TripPlan.TripPlanProject.dto.PlanlistResponseDTO;
+import com.TripPlan.TripPlanProject.dto.TripmemberResponseDTO;
 import com.TripPlan.TripPlanProject.dto.UserResponseDTO;
 import com.TripPlan.TripPlanProject.model.Planlist;
+import com.TripPlan.TripPlanProject.model.TripMember;
 import com.TripPlan.TripPlanProject.model.Tripplandetail;
 import com.TripPlan.TripPlanProject.service.JwtTokenProvider;
 import com.TripPlan.TripPlanProject.service.PlanlistService;
@@ -240,6 +242,39 @@ public class PlanController {
             return ResponseEntity.status(HttpStatus.CREATED).body(response);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error: " + e.getMessage());
+        }
+    }
+
+    // 여행 동행인 조회
+    @GetMapping("/listtripmember")
+    public ResponseEntity<?> listTripMember(@RequestHeader("Authorization") String token,
+                                            @RequestParam String plannum) {
+        String jwtToken = token.substring(7);
+
+        if (!jwtTokenProvider.validateToken(jwtToken)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid JWT token");
+        }
+
+        try {
+            String userId = jwtTokenProvider.getUsername(jwtToken);
+            List<TripMember> tripMembers = planlistService.listTripMember(plannum);
+
+            if (tripMembers.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No trip members found for the given plannum");
+            }
+
+            List<TripmemberResponseDTO> response = tripMembers.stream()
+                    .map(tripMember -> TripmemberResponseDTO.builder()
+                            .plannum(tripMember.getPlannum())
+                            .userId(tripMember.getUserId())
+                            .authority(tripMember.getAuthority())
+                            .build())
+                    .collect(Collectors.toList());
+
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Server Error: " + e.getMessage());
         }
     }
 

@@ -15,6 +15,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 @Service
 public class PlanlistService {
@@ -144,6 +145,11 @@ public class PlanlistService {
         tripMemberRepository.save(addtripMember);
 
         return new UserResponseDTO("Success", "동행인 추가가 성공적으로 완료되었습니다.");
+    }
+
+    // 여행 동행인 조회
+    public List<TripMember> listTripMember(String plannum) {
+        return tripMemberRepository.findByPlannum(plannum);
     }
 
     // 여행 동행인 삭제

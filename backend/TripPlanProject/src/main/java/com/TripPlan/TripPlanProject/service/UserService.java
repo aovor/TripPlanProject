@@ -1,5 +1,6 @@
 package com.TripPlan.TripPlanProject.service;
 
+import com.TripPlan.TripPlanProject.dto.UserdetailResponseDTO;
 import com.TripPlan.TripPlanProject.model.User;
 import com.TripPlan.TripPlanProject.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +8,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -51,6 +53,36 @@ public class UserService {
         user.setPassword(hashPassword(user.getPassword()));
         user.setJoinDate(LocalDateTime.now());
         return userRepository.save(user);
+    }
+
+    // 본인 정보 조회
+    public UserdetailResponseDTO getUserDetails(String userId) {
+        Optional<User> userOpt = userRepository.findByUserId(userId);
+        if (userOpt.isPresent()) {
+            User user = userOpt.get();
+            UserdetailResponseDTO responseDTO = new UserdetailResponseDTO();
+            responseDTO.setUserId(user.getUserId());
+            responseDTO.setName(user.getName());
+            responseDTO.setNickname(user.getNickname());
+            responseDTO.setEmail(user.getEmail());
+            return responseDTO;
+        } else {
+            return null;
+        }
+    }
+
+    // 다른 유저 정보 조회
+    public UserdetailResponseDTO getOtherUserDetails(String userId) {
+        Optional<User> userOpt = userRepository.findByUserId(userId);
+        if (userOpt.isPresent()) {
+            User user = userOpt.get();
+            UserdetailResponseDTO responseDTO = new UserdetailResponseDTO();
+            responseDTO.setUserId(user.getUserId());
+            responseDTO.setNickname(user.getNickname());
+            return responseDTO;
+        } else {
+            return null;
+        }
     }
 
     // 비밀번호 해싱
