@@ -257,22 +257,13 @@ public class PlanController {
 
         try {
             String userId = jwtTokenProvider.getUsername(jwtToken);
-            List<TripMember> tripMembers = planlistService.listTripMember(plannum);
+            List<TripmemberResponseDTO> tripMembers = planlistService.listTripMember(plannum);
 
             if (tripMembers.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No trip members found for the given plannum");
             }
 
-            List<TripmemberResponseDTO> response = tripMembers.stream()
-                    .map(tripMember -> TripmemberResponseDTO.builder()
-                            .plannum(tripMember.getPlannum())
-                            .userId(tripMember.getUserId())
-                            .authority(tripMember.getAuthority())
-                            .build())
-                    .collect(Collectors.toList());
-
-            return ResponseEntity.ok(response);
-
+            return ResponseEntity.ok(tripMembers);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Server Error: " + e.getMessage());
         }

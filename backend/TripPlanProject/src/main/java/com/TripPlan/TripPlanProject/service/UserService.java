@@ -71,20 +71,6 @@ public class UserService {
         }
     }
 
-    // 다른 유저 정보 조회
-    public UserdetailResponseDTO getOtherUserDetails(String userId) {
-        Optional<User> userOpt = userRepository.findByUserId(userId);
-        if (userOpt.isPresent()) {
-            User user = userOpt.get();
-            UserdetailResponseDTO responseDTO = new UserdetailResponseDTO();
-            responseDTO.setUserId(user.getUserId());
-            responseDTO.setNickname(user.getNickname());
-            return responseDTO;
-        } else {
-            return null;
-        }
-    }
-
     // 비밀번호 해싱
     private String hashPassword(String password) {
         return new BCryptPasswordEncoder().encode(password);

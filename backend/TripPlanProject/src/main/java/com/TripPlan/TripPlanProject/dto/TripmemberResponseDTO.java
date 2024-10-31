@@ -10,5 +10,6 @@ import lombok.Setter;
 public class TripmemberResponseDTO {
     private String plannum;
     private String userId;
+    private String nickname;
     private int authority;
 }

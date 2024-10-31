@@ -1,12 +1,15 @@
 package com.TripPlan.TripPlanProject.service;
 
+import com.TripPlan.TripPlanProject.dto.TripmemberResponseDTO;
 import com.TripPlan.TripPlanProject.dto.UserResponseDTO;
 import com.TripPlan.TripPlanProject.model.Planlist;
 import com.TripPlan.TripPlanProject.model.TripMember;
 import com.TripPlan.TripPlanProject.model.Tripplandetail;
+import com.TripPlan.TripPlanProject.model.User;
 import com.TripPlan.TripPlanProject.repository.PlandetailRepository;
 import com.TripPlan.TripPlanProject.repository.PlanlistRepository;
 import com.TripPlan.TripPlanProject.repository.TripMemberRepository;
+import com.TripPlan.TripPlanProject.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,11 +25,13 @@ public class PlanlistService {
     private final PlanlistRepository planlistRepository;
     private final PlandetailRepository plandetailRepository;
     private final TripMemberRepository tripMemberRepository;
+    private final UserRepository userRepository;
 
-    public PlanlistService(PlanlistRepository planlistRepository, PlandetailRepository plandetailRepository, TripMemberRepository tripMemberRepository){
+    public PlanlistService(PlanlistRepository planlistRepository, PlandetailRepository plandetailRepository, TripMemberRepository tripMemberRepository, UserRepository userRepository){
         this.planlistRepository = planlistRepository;
         this.plandetailRepository = plandetailRepository;
         this.tripMemberRepository = tripMemberRepository;
+        this.userRepository = userRepository;
     }
 
     // 여행 일정 생성
@@ -148,9 +153,22 @@ public class PlanlistService {
     }
 
     // 여행 동행인 조회
-    public List<TripMember> listTripMember(String plannum) {
-        return tripMemberRepository.findByPlannum(plannum);
+    public List<TripmemberResponseDTO> listTripMember(String plannum) {
+        List<TripMember> tripMembers = tripMemberRepository.findByPlannum(plannum);
+        List<TripmemberResponseDTO> response = tripMembers.stream().map(tripMember -> {
+            User user = userRepository.findByUserId(tripMember.getUserId())
+                    .orElseThrow(() -> new IllegalArgumentException("User not found for userId: " + tripMember.getUserId()));
+
+            return TripmemberResponseDTO.builder()
+                    .plannum(tripMember.getPlannum())
+                    .userId(tripMember.getUserId())
+                    .nickname(user.getNickname())
+                    .authority(tripMember.getAuthority())
+                    .build();
+        }).collect(Collectors.toList());
+        return response;
     }
+
 
     // 여행 동행인 삭제
     @Transactional
