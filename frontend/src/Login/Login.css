@@ -87,6 +87,7 @@
   @media (max-width: 768px) { 
     .Main-header1 {
       min-height: 100vh; 
+      min-width : 100vh; 
     }
   
     .box {
