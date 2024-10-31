@@ -163,8 +163,7 @@ public class PlanController {
     // 세부 일정 수정 api
     @PutMapping("/plandetailupdate")
     public ResponseEntity<?> updatePlanDetail(@RequestHeader("Authorization") String token,
-                                        @RequestBody DetailResponseDTO detailRequest,
-                                              @RequestParam String plannum, int tripdate, String Destination) {
+                                        @RequestBody DetailResponseDTO detailRequest) {
         try {
             String jwtToken = token.substring(7);
 
@@ -174,7 +173,7 @@ public class PlanController {
 
             String userId = jwtTokenProvider.getUsername(jwtToken);
 
-            UserResponseDTO response = planlistService.updatePlanDetail(detailRequest.toEntity(), plannum, userId, tripdate, Destination);
+            UserResponseDTO response = planlistService.updatePlanDetail(detailRequest.toEntity(), userId);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error: " + e.getMessage());

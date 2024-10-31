@@ -80,15 +80,15 @@ public class PlanlistService {
     }
 
     // 여행 세부 일정 수정
-    public UserResponseDTO updatePlanDetail(Tripplandetail updateDetail, String plannum, String userId, int tripdate, String Destination) {
-        if (!hasAuthority(plannum, userId, 1, 2)) {
+    public UserResponseDTO updatePlanDetail(Tripplandetail updateDetail, String userId) {
+        if (!hasAuthority(updateDetail.getPlannum(), userId, 1, 2)) {
             return new UserResponseDTO("Fail", "일정을 수정할 권한이 없습니다.");
         }
 
         Tripplandetail existingDetail = plandetailRepository.findByPlannumAndTripdateAndDestination(
-                plannum,
-                tripdate,
-                Destination
+                updateDetail.getPlannum(),
+                updateDetail.getTripdate(),
+                updateDetail.getDestination()
         ).orElseThrow(() -> new IllegalArgumentException("Plan detail not found"));
 
         existingDetail.setTripdate(updateDetail.getTripdate());
