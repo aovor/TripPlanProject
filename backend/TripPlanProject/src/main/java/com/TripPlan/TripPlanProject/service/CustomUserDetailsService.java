@@ -22,10 +22,8 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
-        User user = userRepository.findByUserId(userId);
-        if (user == null) {
-            throw new UsernameNotFoundException("User not found with username: " + userId);
-        }
+        User user = userRepository.findByUserId(userId)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + userId));
 
         // 권한 정보를 설정할 수 있음 (현재는 빈 리스트)
         return new org.springframework.security.core.userdetails.User(
