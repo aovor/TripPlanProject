@@ -9,7 +9,6 @@
 3. Database: MySQL
 4. API: Naver MAP API
 5. IDE: IntelliJ
-- 이번 프로젝트의 목표는 Spring boot를 공부하며 익히기 위함
 
 
 ### 상세 기능 설명
