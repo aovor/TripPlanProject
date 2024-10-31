@@ -76,26 +76,4 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Server Error: " + e.getMessage());
         }
     }
-
-    // 다른 유저 정보 조회 api
-    @GetMapping("/otheruserdetails")
-    public ResponseEntity<?> getOtherUserDetails(@RequestHeader("Authorization") String token,
-                                            @RequestParam String userId) {
-        String jwtToken = token.substring(7);
-
-        if (!jwtTokenProvider.validateToken(jwtToken)) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid JWT token");
-        }
-
-        try {
-            UserdetailResponseDTO userDetail = userService.getOtherUserDetails(userId);
-            if (userDetail == null) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found for the given userId");
-            }
-
-            return ResponseEntity.ok(userDetail);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Server Error: " + e.getMessage());
-        }
-    }
 }
