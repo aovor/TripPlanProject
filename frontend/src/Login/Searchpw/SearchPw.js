@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import axios from 'axios'
 import { TextField, Box } from '@mui/material';
-import './Search.css';
+import './SearchPw.css';
 
 function SearchPw() {
 
