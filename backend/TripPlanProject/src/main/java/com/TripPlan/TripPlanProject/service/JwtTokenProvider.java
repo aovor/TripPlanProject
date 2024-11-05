@@ -9,6 +9,7 @@ import javax.crypto.spec.SecretKeySpec;
 import java.security.Key;
 import java.util.Base64;
 import java.util.Date;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -31,7 +32,9 @@ public class JwtTokenProvider {
 
     // JWT 토큰 생성
     public String createToken(String userId) {
-        Claims claims = Jwts.claims().setSubject(userId); // 사용자 정보 저장
+        Claims claims = Jwts.claims().setSubject(userId);
+        claims.put("issuedAt", System.currentTimeMillis());
+        claims.put("random", UUID.randomUUID().toString());
         Date now = new Date();
         Date validity = new Date(now.getTime() + EXPIRATION_TIME);
 
