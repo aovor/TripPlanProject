@@ -1,5 +1,6 @@
 package com.TripPlan.TripPlanProject.controller;
 
+import com.TripPlan.TripPlanProject.dto.LoginRequestDTO;
 import com.TripPlan.TripPlanProject.dto.LoginResponseDTO;
 import com.TripPlan.TripPlanProject.service.JwtTokenProvider;
 import lombok.extern.slf4j.Slf4j;
@@ -27,8 +28,11 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponseDTO> login(@RequestParam String userId, @RequestParam String password) {
+    public ResponseEntity<LoginResponseDTO> login(@RequestBody LoginRequestDTO loginRequest) {
         try {
+            String userId = loginRequest.getUserId();
+            String password = loginRequest.getPassword();
+
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(userId, password));
 
