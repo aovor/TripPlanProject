@@ -84,7 +84,7 @@
 }
 
 /* 모바일 크기 대응 */
-  @media (max-width: 768px) { 
+@media (max-width: 768px) { 
     .Main-header1 {
       min-height: 100vh; 
       min-width : 100vh; 
@@ -95,4 +95,4 @@
       max-width: 100%; 
 
     }
-  }
+}

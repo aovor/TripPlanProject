@@ -2,8 +2,10 @@ import React, {useState} from 'react';
 import axios from 'axios'
 import { TextField, Box } from '@mui/material';
 import './Login.css';
+import { useNavigate } from 'react-router-dom';
 
 function Login() {
+  const navigate = useNavigate();
 
   const [userid, setUserId] = useState('')
   const [pw, setPw] = useState('')
@@ -29,6 +31,7 @@ function Login() {
 
         alert('로그인');
         console.log('로그인 성공:', response);
+        
       }
       else if (response.status == 401){
         alert('아이디, 비밀번호가 틀렸습니다.')
@@ -75,6 +78,7 @@ function Login() {
                     fullWidth
                     margin="normal"
                     value = {pw}
+                    type = "password" // 비밀번호 숨김
                     onChange={handlePasswordChange}
                     style={{ width: '300px' }} 
                   />

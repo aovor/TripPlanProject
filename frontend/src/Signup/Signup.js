@@ -2,8 +2,11 @@ import React, {useState} from 'react';
 import axios from 'axios'
 import { TextField, Box } from '@mui/material';
 import './Signup.css';
+import { useNavigate } from 'react-router-dom';
 
 function Signup() {
+
+  const navigate = useNavigate();
 
   const [userid, setUserId] = useState('')
   const [isIdAvailable, setIsIdAvailable] = useState(null); // 아이디 사용 가능 여부 저장
@@ -77,6 +80,7 @@ function Signup() {
       if (response.status === 201) { 
         alert('회원가입 성공');
         console.log('회원가입 성공:', response);
+        navigate('/ComSignup');
       } else {
         alert('회원가입 중 문제가 발생했습니다.');
       }
@@ -257,6 +261,7 @@ function Signup() {
                     fullWidth
                     margin="normal"
                     value = {pw}
+                    type = "password"
                     onChange={handlePasswordChange}
                     style={{ width: '300px' }} 
                     inputProps={{
@@ -272,6 +277,7 @@ function Signup() {
                     fullWidth
                     margin="normal"
                     value = {checkpw}
+                    type = "password"
                     onChange={handleCheckpwChange}
                     style={{ width: '300px' }} 
                     inputProps={{

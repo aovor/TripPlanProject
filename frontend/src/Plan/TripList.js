@@ -4,6 +4,7 @@ import { TextField, Box } from '@mui/material';
 import './Plan.css';
 import { useNavigate } from 'react-router-dom';
 
+
 function TripList() {
   const navigate = useNavigate();
   const [userName, setUserName] = useState('');
@@ -56,33 +57,36 @@ function TripList() {
       });
     }, [navigate]);
 
+
   
   return (
         <div className="Main2">
           <header className="Main-header1">
               <div className="plan-box">
                 <div className="Plan-title">
-                    <span style={{ color: '#43A047' }}>{userName || '00'}</span> 님의 여행
+                
+                  <span style={{ color: '#43A047' }}>{userName || '00'}</span> 님의 여행
                 </div>
-
-                {/* 여행 일정 네모 두 개 */}
+                
                 <div className="schedule-container">
                     {tripData.length > 0 ? (
                         tripData.map((trip, index) => (
-                        <div key={index} className="schedule-box">
-                        <p><strong>여행 번호:</strong> {trip.plannum}</p>
-                        <p><strong>여행 지역:</strong> {trip.tripRegion}</p>
-                        <p><strong>여행 기간:</strong> {trip.startDate} - {trip.endDate}</p>
-                        <p><strong>총 일수:</strong> {trip.tripTotalDate}일</p>
-                        <p><strong>여행 루트:</strong> {trip.tripRoute}</p>
-                        <p><strong>여행 공개 여부:</strong> {trip.tripOpen ? '공개' : '비공개'}</p>
+                        <div 
+                            key={index} 
+                            className="schedule-container2"
+                            onClick={() => navigate(`/TripList-${trip.plannum}`)} 
+                             >
+                          <p><strong>여행 지역 :</strong> {trip.tripRegion}</p>
+                          <p><strong>여행 기간 :</strong> {trip.startDate} - {trip.endDate}</p>
+                          <p><strong>총 일수 :</strong> {trip.tripTotalDate}일</p>
+                          <p><strong> 공개 여부 :</strong> {trip.tripopen ? '비공개' : '공개'}</p>
                         </div>
-                    ))
+                    )) 
                     ) : (
-                    <p>여행 일정이 없습니다.</p>
+                      <p style={{ fontSize: '0.8em', color: '#000000' }}>여행 일정이 없습니다.</p>
                     )}
                 </div>
-            </div>
+            </div>zz
           </header>
         </div>
     );
