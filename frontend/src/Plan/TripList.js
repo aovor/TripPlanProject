@@ -3,12 +3,16 @@ import axios from 'axios'
 import { TextField, Box } from '@mui/material';
 import './Plan.css';
 import { useNavigate } from 'react-router-dom';
+import trip1 from '../img/trip1.png';
+import trip2 from '../img/trip3.jpg';
 
 
 function TripList() {
   const navigate = useNavigate();
   const [userName, setUserName] = useState('');
   const [tripData, setTripData] = useState({});
+
+  const images = [trip1, trip2];  // src 폴더 경로
 
   useEffect(() => {
     // 로컬 스토리지에서 토큰을 가져옴
@@ -73,20 +77,24 @@ function TripList() {
                         tripData.map((trip, index) => (
                         <div 
                             key={index} 
-                            className="schedule-container2"
-                            onClick={() => navigate(`/TripList-${trip.plannum}`)} 
                              >
-                          <p><strong>여행 지역 :</strong> {trip.tripRegion}</p>
-                          <p><strong>여행 기간 :</strong> {trip.startDate} - {trip.endDate}</p>
-                          <p><strong>총 일수 :</strong> {trip.tripTotalDate}일</p>
-                          <p><strong> 공개 여부 :</strong> {trip.tripopen ? '비공개' : '공개'}</p>
+                           <img 
+                            className="plan-img" 
+                            src={images[index % images.length]} 
+                            alt="Trip Image" 
+                            onClick={() => navigate(`/TripList-${trip.plannum}`)} 
+                        />
+                          <div className = "plan-region"> {trip.tripRegion} </div>
+                          <div className="plan-date">  {trip.startDate} - {trip.endDate} ({trip.tripTotalDate}일) </div>
+                       
                         </div>
+                        
                     )) 
                     ) : (
                       <p style={{ fontSize: '0.8em', color: '#000000' }}>여행 일정이 없습니다.</p>
                     )}
                 </div>
-            </div>zz
+            </div>
           </header>
         </div>
     );

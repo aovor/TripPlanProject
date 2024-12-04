@@ -30,7 +30,7 @@ function Login() {
         localStorage.setItem('token', token); // 토큰 저장
 
         alert('로그인');
-        console.log('로그인 성공:', response);
+        navigate('/triplist'); 
         
       }
       else if (response.status == 401){
