@@ -1,5 +1,6 @@
-package com.TripPlan.TripPlanProject.model;
+package com.TripPlan.TripPlanProject.PlanPackage.model;
 
+import com.TripPlan.TripPlanProject.UserPackage.model.User;
 import jakarta.persistence.*;
 import lombok.NoArgsConstructor;
 import lombok.Getter;

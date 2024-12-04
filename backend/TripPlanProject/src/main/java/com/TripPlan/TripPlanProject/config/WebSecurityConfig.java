@@ -1,6 +1,6 @@
 package com.TripPlan.TripPlanProject.config;
 
-import com.TripPlan.TripPlanProject.service.CustomUserDetailsService;
+import com.TripPlan.TripPlanProject.UserPackage.service.CustomUserDetailsService;
 import lombok.Getter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

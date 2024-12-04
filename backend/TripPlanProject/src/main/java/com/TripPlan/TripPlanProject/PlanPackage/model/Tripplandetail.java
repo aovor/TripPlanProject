@@ -1,4 +1,4 @@
-package com.TripPlan.TripPlanProject.model;
+package com.TripPlan.TripPlanProject.PlanPackage.model;
 
 import jakarta.persistence.*;
 import lombok.*;

@@ -1,4 +1,4 @@
-package com.TripPlan.TripPlanProject.dto;
+package com.TripPlan.TripPlanProject.AuthPackage.dto;
 
 import lombok.Getter;
 import lombok.Setter;

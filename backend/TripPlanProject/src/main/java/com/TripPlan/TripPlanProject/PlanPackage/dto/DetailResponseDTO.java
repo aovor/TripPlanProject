@@ -1,6 +1,6 @@
-package com.TripPlan.TripPlanProject.dto;
+package com.TripPlan.TripPlanProject.PlanPackage.dto;
 
-import com.TripPlan.TripPlanProject.model.Tripplandetail;
+import com.TripPlan.TripPlanProject.PlanPackage.model.Tripplandetail;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;

@@ -1,7 +1,7 @@
-package com.TripPlan.TripPlanProject.service;
+package com.TripPlan.TripPlanProject.UserPackage.service;
 
-import com.TripPlan.TripPlanProject.model.User;
-import com.TripPlan.TripPlanProject.repository.UserRepository;
+import com.TripPlan.TripPlanProject.UserPackage.model.User;
+import com.TripPlan.TripPlanProject.UserPackage.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

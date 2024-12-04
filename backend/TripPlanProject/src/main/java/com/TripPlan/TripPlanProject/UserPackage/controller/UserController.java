@@ -1,10 +1,10 @@
-package com.TripPlan.TripPlanProject.controller;
+package com.TripPlan.TripPlanProject.UserPackage.controller;
 
-import com.TripPlan.TripPlanProject.dto.UserResponseDTO;
-import com.TripPlan.TripPlanProject.dto.UserdetailResponseDTO;
-import com.TripPlan.TripPlanProject.model.User;
-import com.TripPlan.TripPlanProject.service.JwtTokenProvider;
-import com.TripPlan.TripPlanProject.service.UserService;
+import com.TripPlan.TripPlanProject.config.JwtTokenProvider;
+import com.TripPlan.TripPlanProject.UserPackage.model.User;
+import com.TripPlan.TripPlanProject.UserPackage.service.UserService;
+import com.TripPlan.TripPlanProject.UserPackage.dto.UserResponseDTO;
+import com.TripPlan.TripPlanProject.UserPackage.dto.UserdetailResponseDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

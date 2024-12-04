@@ -1,7 +1,6 @@
-package com.TripPlan.TripPlanProject.repository;
+package com.TripPlan.TripPlanProject.PlanPackage.repository;
 
-import com.TripPlan.TripPlanProject.dto.UserResponseDTO;
-import com.TripPlan.TripPlanProject.model.TripMember;
+import com.TripPlan.TripPlanProject.PlanPackage.model.TripMember;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

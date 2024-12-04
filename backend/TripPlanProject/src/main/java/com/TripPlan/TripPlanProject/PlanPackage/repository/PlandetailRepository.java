@@ -1,7 +1,6 @@
-package com.TripPlan.TripPlanProject.repository;
+package com.TripPlan.TripPlanProject.PlanPackage.repository;
 
-import com.TripPlan.TripPlanProject.model.Planlist;
-import com.TripPlan.TripPlanProject.model.Tripplandetail;
+import com.TripPlan.TripPlanProject.PlanPackage.model.Tripplandetail;
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 import java.util.Optional;

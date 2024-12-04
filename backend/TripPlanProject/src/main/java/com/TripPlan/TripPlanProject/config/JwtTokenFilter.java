@@ -1,6 +1,5 @@
 package com.TripPlan.TripPlanProject.config;
-import com.TripPlan.TripPlanProject.dto.UserResponseDTO;
-import com.TripPlan.TripPlanProject.service.JwtTokenProvider;
+import com.TripPlan.TripPlanProject.UserPackage.dto.UserResponseDTO;
 
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;

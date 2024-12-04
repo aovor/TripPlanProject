@@ -1,4 +1,4 @@
-package com.TripPlan.TripPlanProject.service;
+package com.TripPlan.TripPlanProject.config;
 
 import io.jsonwebtoken.*;
 import lombok.extern.slf4j.Slf4j;

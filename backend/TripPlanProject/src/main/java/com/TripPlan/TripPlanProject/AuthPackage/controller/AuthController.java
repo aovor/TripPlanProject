@@ -1,8 +1,8 @@
-package com.TripPlan.TripPlanProject.controller;
+package com.TripPlan.TripPlanProject.AuthPackage.controller;
 
-import com.TripPlan.TripPlanProject.dto.LoginRequestDTO;
-import com.TripPlan.TripPlanProject.dto.LoginResponseDTO;
-import com.TripPlan.TripPlanProject.service.JwtTokenProvider;
+import com.TripPlan.TripPlanProject.config.JwtTokenProvider;
+import com.TripPlan.TripPlanProject.AuthPackage.dto.LoginRequestDTO;
+import com.TripPlan.TripPlanProject.AuthPackage.dto.LoginResponseDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpStatus;

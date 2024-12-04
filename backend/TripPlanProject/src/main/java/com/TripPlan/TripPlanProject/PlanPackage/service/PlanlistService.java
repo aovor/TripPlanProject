@@ -1,15 +1,15 @@
-package com.TripPlan.TripPlanProject.service;
+package com.TripPlan.TripPlanProject.PlanPackage.service;
 
-import com.TripPlan.TripPlanProject.dto.TripmemberResponseDTO;
-import com.TripPlan.TripPlanProject.dto.UserResponseDTO;
-import com.TripPlan.TripPlanProject.model.Planlist;
-import com.TripPlan.TripPlanProject.model.TripMember;
-import com.TripPlan.TripPlanProject.model.Tripplandetail;
-import com.TripPlan.TripPlanProject.model.User;
-import com.TripPlan.TripPlanProject.repository.PlandetailRepository;
-import com.TripPlan.TripPlanProject.repository.PlanlistRepository;
-import com.TripPlan.TripPlanProject.repository.TripMemberRepository;
-import com.TripPlan.TripPlanProject.repository.UserRepository;
+import com.TripPlan.TripPlanProject.PlanPackage.dto.TripmemberResponseDTO;
+import com.TripPlan.TripPlanProject.UserPackage.dto.UserResponseDTO;
+import com.TripPlan.TripPlanProject.PlanPackage.model.Planlist;
+import com.TripPlan.TripPlanProject.PlanPackage.model.TripMember;
+import com.TripPlan.TripPlanProject.PlanPackage.model.Tripplandetail;
+import com.TripPlan.TripPlanProject.UserPackage.model.User;
+import com.TripPlan.TripPlanProject.PlanPackage.repository.PlandetailRepository;
+import com.TripPlan.TripPlanProject.PlanPackage.repository.PlanlistRepository;
+import com.TripPlan.TripPlanProject.PlanPackage.repository.TripMemberRepository;
+import com.TripPlan.TripPlanProject.UserPackage.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

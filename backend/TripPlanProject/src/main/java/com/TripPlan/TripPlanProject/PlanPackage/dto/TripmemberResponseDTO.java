@@ -1,4 +1,4 @@
-package com.TripPlan.TripPlanProject.dto;
+package com.TripPlan.TripPlanProject.PlanPackage.dto;
 
 import lombok.Builder;
 import lombok.Getter;
