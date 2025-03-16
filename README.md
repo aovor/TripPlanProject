@@ -48,9 +48,6 @@
 
 ERD(추후 수정될 가능성 있음): https://www.erdcloud.com/d/oDeFHEKHeYieQ2Mxa
 ![image](https://github.com/user-attachments/assets/7c36503a-204e-4eda-9325-c563ba54736f)
-
-
-  
-
-
+API 명세서(추후 수정될 가능성 있음)
+https://drive.google.com/file/d/1zxGzOyzVSTWIOZZwXxDZJ8FlJ89dGd_f/view?usp=drive_link
 
