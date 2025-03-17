@@ -2,8 +2,11 @@ import React, {useState} from 'react';
 import axios from 'axios'
 import { TextField, Box } from '@mui/material';
 import './Signup.css';
+import { useNavigate } from 'react-router-dom';
 
 function Signup() {
+
+  const navigate = useNavigate();
 
   const [userid, setUserId] = useState('')
   const [isIdAvailable, setIsIdAvailable] = useState(null); // 아이디 사용 가능 여부 저장
@@ -25,9 +28,9 @@ function Signup() {
     // 비밀번호 유효성 검사: 대문자, 소문자, 숫자, 특수 문자 포함한 8자 이상
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]).{8,}$/;
     
-    
+
     // 이메일 유효성 검사
-    if (!email || !emailRegex.test(email)) {
+    if (!emailRegex.test(email)) {
         alert('유효하지 않은 이메일 형식입니다. 올바른 이메일을 입력해주세요.');
         return; 
     }
@@ -51,14 +54,14 @@ function Signup() {
     }
     
     // 이메일 중복 여부 확인
-    if(isEmailAvailable === false) {
+    if(isEmailAvailable === false ||isEmailAvailable === null ) {
       alert('중복되지 않는 이메일을 입력해주세요.')
       return;
     }
 
     // 아이디 중복 여부 확인
-    if(isIdAvailable === false) {
-      alert('중복되지 않는 아이디를 입력해주세요.')
+    if(isIdAvailable === false || isIdAvailable === null) {
+      alert('아이디 중복확인을 해주세요.')
       return;
     }
     
@@ -77,13 +80,14 @@ function Signup() {
       if (response.status === 201) { 
         alert('회원가입 성공');
         console.log('회원가입 성공:', response);
+        navigate('/ComSignup');
       } else {
         alert('회원가입 중 문제가 발생했습니다.');
       }
     })
     .catch(error => {
       if (error.response && error.response.status === 400) {
-        alert('유효하지 않은 입력입니다. 아이디나 이메일이 중복되었거나, 비밀번호 형식이 잘못되었습니다.');
+        alert('유효하지 않은 입력입니다. 항목을 다시 확인해주세요.');
       } else {
         console.error('회원가입 실패:', error);
         alert('서버 오류가 발생했습니다. 다시 시도해 주세요.');
@@ -93,7 +97,15 @@ function Signup() {
 
   /* 아이디 중복 확인 */
   const checkIdAvailability = () => { 
-    axios.post('/api/users/check-id', { userId: userid })
+
+    // 아이디 길이 검사(5글자 이상)
+    if (userid.length < 5) {
+      alert("아이디는 5글자 이상이어야 합니다.");
+      setIsEmailAvailable(false);
+      return;
+    }
+
+    axios.get('/api/users/check-id', { params: { userId: userid } })
       .then(response => {
         if (response.status === 200) {
           setIsIdAvailable(true);
@@ -115,18 +127,24 @@ function Signup() {
       return;
     }
 
-    // 이메일이 유효한 경우 확인 요청
-    axios.post('/api/users/check-email', { email: email })
-      .then(response => {
-        if (response.status === 200) {
-          setIsEmailAvailable(true);
-        }
-      })
-      .catch(error => {
-        setIsEmailAvailable(false);
-      });
-  };
-
+    axios.get('/api/users/check-email', { params: { email: email } })
+    .then(response => {
+      if (response.status === 200) {
+        setIsEmailAvailable(true);  // 이메일 사용 가능
+        alert("사용가능한 이메일입니다.")
+      }
+    })
+    .catch(error => {
+      if (error.response && error.response.status === 400) {
+        setIsEmailAvailable(false);  // 이메일 이미 존재함
+        alert("이메일이 이미 존재합니다.")
+      } else {
+        console.error("이메일 중복을 확인하는 중 에러가 발생했습니다.");
+      }
+    });
+  }
+  
+  
   const handleUsernameChange = (event) => {
     setUserId(event.target.value);
   };
@@ -140,15 +158,15 @@ function Signup() {
   };
 
   const handleEmailChange = (event) => {
-    const newEmail = event.target.value;
-    setEmail(newEmail);
+    const email = event.target.value;
+    setEmail(email);
 
     // 이전 타이머가 있으면 클리어하여 디바운스 적용
     if (emailCheckTimeout) clearTimeout(emailCheckTimeout);
 
     // 일정 시간(예: 500ms) 동안 입력이 없으면 중복 확인 요청
     const newTimeout = setTimeout(() => {
-      checkEmailAvailability(newEmail);
+      checkEmailAvailability(email);
     }, 500);
     setEmailCheckTimeout(newTimeout);
   };
@@ -243,6 +261,7 @@ function Signup() {
                     fullWidth
                     margin="normal"
                     value = {pw}
+                    type = "password"
                     onChange={handlePasswordChange}
                     style={{ width: '300px' }} 
                     inputProps={{
@@ -258,6 +277,7 @@ function Signup() {
                     fullWidth
                     margin="normal"
                     value = {checkpw}
+                    type = "password"
                     onChange={handleCheckpwChange}
                     style={{ width: '300px' }} 
                     inputProps={{
