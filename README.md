@@ -1,6 +1,6 @@
 # ✈️ Trip Plan Project [진행 중]
 [![Frontend: KIM](https://img.shields.io/badge/Frontend-KIMKYOYEON-blue)](https://github.com/gyoyeon-kim)
-[![Backend: OH](https://img.shields.io/badge/Backend-OHHYESEUNG-green)](https://github.com/Hyeseung-Oh)
+[![Backend: OH](https://img.shields.io/badge/Backend-OHHYESEUNG-green)](https://github.com/aovor)
 > **여행 플랜 관리 웹**  
 > 여행 일정을 생성하고, 입력한 목적지를 기반으로 적절한 여행 동선을 추천합니다.
 
